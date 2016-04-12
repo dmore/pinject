@@ -28,7 +28,10 @@ def find_classes(modules, classes):
         all_classes = set()
     for module in _get_explicit_or_default_modules(modules):
         # TODO(kurts): how is a module getting to be None??
-        if module is not None:
+        # fix for https://github.com/google/pinject/issues/11
+        if module is not None \
+                and not str(module.__name__).__contains__("six.moves"): # six.moves boto.vendored.six.moves
+            print "module_name: %s" % module.__name__
             all_classes |= _find_classes_in_module(module)
     return all_classes
 
